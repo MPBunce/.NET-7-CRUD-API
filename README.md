@@ -1,0 +1,3 @@
+# .NET-7-CRUD-API
+
+CRUD API in .NET 7.0!
