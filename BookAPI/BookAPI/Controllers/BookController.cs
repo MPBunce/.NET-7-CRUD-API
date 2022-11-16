@@ -20,7 +20,7 @@ namespace BookAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Book>>> GetAllBooks()
         {
-            return _bookService.GetAllBooks();
+            return await _bookService.GetAllBooks();
         }
 
         //[HttpGet]
@@ -28,7 +28,7 @@ namespace BookAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Book>>>? GetSingleBook(int id)
         {
-            var result = _bookService.GetSingleBook(id);
+            var result = await _bookService.GetSingleBook(id);
             if (result == null)
                 return NotFound("We didnt find this sorry");
             return Ok(result);
@@ -37,7 +37,7 @@ namespace BookAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Book>>> CreateBook(Book newBook)
         {
-            var result = _bookService.CreateBook(newBook);
+            var result = await _bookService.CreateBook(newBook);
             if (result == null)
                 return NotFound("We didnt find this sorry");
             return Ok(result);
@@ -46,7 +46,7 @@ namespace BookAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Book>>> UpdateBook(int id, Book updateBook)
         {
-            var result = _bookService.UpdateBook(id, updateBook);
+            var result = await _bookService.UpdateBook(id, updateBook);
             if (result is null)
                 return NotFound("Could not find hero with corresponding ID");
             return Ok(result);
@@ -56,7 +56,7 @@ namespace BookAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Book>>> DeleteBook(int id)
         {
-            var result = _bookService.DeleteBook(id);
+            var result = await _bookService.DeleteBook(id);
             if (result is null)
                 return NotFound("Could not find hero with corresponding ID");
             return Ok(result);

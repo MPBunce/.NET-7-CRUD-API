@@ -7,38 +7,52 @@
                 new Book { Id = 2, Title = "The Book of 5 Rings", Author="Mimato Musashi", Description="Samauri wisdon for life"}
         };
 
-        public List<Book> CreateBook(Book newBook)
+        private readonly DataContext _context;
+
+        public BookService(DataContext context)
         {
-            books.Add(newBook);
-            return books;
+            _context = context;
         }
 
-        public List<Book>? DeleteBook(int id)
+        public async Task<List<Book>> CreateBook(Book newBook)
         {
-            var book = books.Find(x => x.Id == id);
+
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
+            return await _context.Books.ToListAsync();
+
+        }
+
+        public async Task<List<Book>> DeleteBook(int id)
+        {
+            var book = await _context.Books.FindAsync(id);
             if (book is null)
                 return null;
-            books.Remove(book);
 
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+
+            return await _context.Books.ToListAsync();
+        }
+
+        public async Task<List<Book>> GetAllBooks()
+        {
+            var books = await _context.Books.ToListAsync();
             return books;
         }
 
-        public List<Book> GetAllBooks()
+        public async Task<Book>? GetSingleBook(int id)
         {
-            return books;
-        }
-
-        public Book? GetSingleBook(int id)
-        {
-            var book = books.Find(x => x.Id == id);
+            var book = await _context.Books.FindAsync(id);
             if (book is null)
                 return null;
             return book;
         }
 
-        public List<Book>? UpdateBook(int id, Book updateBook)
+        public async Task<List<Book>>? UpdateBook(int id, Book updateBook)
         {
-            var book = books.Find(x => x.Id == id);
+            var book = await _context.Books.FindAsync(id);
             if (book is null)
                 return null;
 
@@ -46,7 +60,9 @@
             book.Author = updateBook.Author;
             book.Description = updateBook.Description;
 
-            return books;
+            await _context.SaveChangesAsync();
+
+            return await _context.Books.ToListAsync();
         }
     }
 }

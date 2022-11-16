@@ -5,10 +5,10 @@ namespace BookAPI.Services.BookService
     public interface IBook
     {
 
-        List<Book> GetAllBooks();
-        Book? GetSingleBook(int id);
-        List<Book>? CreateBook(Book newBook);
-        List<Book>? UpdateBook(int id, Book updateBook);
-        List<Book>? DeleteBook(int id);
+        Task<List<Book>> GetAllBooks();
+        Task<Book?> GetSingleBook(int id);
+        Task<List<Book>> CreateBook(Book newBook);
+        Task<List<Book>?> UpdateBook(int id, Book updateBook);
+        Task<List<Book>?> DeleteBook(int id);
     }
 }
