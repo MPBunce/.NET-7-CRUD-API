@@ -13,7 +13,7 @@ namespace BookAPI.DataCont
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=DESKTOP-4AROGVD\\TEW_SQLEXPRESS;Database=CRUD-Book-DB;User Id=MBUNCE;Password=bunk;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-4AROGVD\\TEW_SQLEXPRESS;Database=crud-book-db;Trusted_Connection=true;encrypt=false");
         }
 
         public DbSet<Book> Books { get; set; }
