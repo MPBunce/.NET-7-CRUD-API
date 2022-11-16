@@ -1,4 +1,4 @@
-﻿using BookAPI.Models;
+﻿using BookAPI.Services.BookService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -10,58 +10,56 @@ namespace BookAPI.Controllers
     public class BookController : ControllerBase
     {
 
-        private static List<Book> books = new List<Book> {
-                new Book { Id = 1, Title = "12 Rules for Life", Author="Jordan Peterson", Description="12 principles to bring order in your life"},
-                new Book { Id = 2, Title = "The Book of 5 Rings", Author="Mimato Musashi", Description="Samauri wisdon for life"}
-        };
+        private readonly IBook _bookService;
 
+        public BookController(IBook bookService)
+        {   
+            _bookService = bookService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Book>>> GetAllBooks()
         {
-            return Ok(books);
+            return _bookService.GetAllBooks();
         }
 
         //[HttpGet]
         //[Route("{id}")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<Book>>> GetSingleBook(int id)
+        public async Task<ActionResult<List<Book>>>? GetSingleBook(int id)
         {
-            var book = books.Find(x => x.Id == id);
-            return Ok(book);
+            var result = _bookService.GetSingleBook(id);
+            if (result == null)
+                return NotFound("We didnt find this sorry");
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Book>>> CreateBook(Book newBook)
         {
-            books.Add(newBook);
-            return Ok(books);
+            var result = _bookService.CreateBook(newBook);
+            if (result == null)
+                return NotFound("We didnt find this sorry");
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Book>>> UpdateBook(Book updateBook)
+        public async Task<ActionResult<List<Book>>> UpdateBook(int id, Book updateBook)
         {
-            var book = books.Find(x => x.Id == updateBook.Id);
-            if (book is null)
-                return NotFound("Cant find it");
-
-            book.Title = updateBook.Title;
-            book.Author = updateBook.Author;
-            book.Description = updateBook.Description;
-
-            return Ok(books);
+            var result = _bookService.UpdateBook(id, updateBook);
+            if (result is null)
+                return NotFound("Could not find hero with corresponding ID");
+            return Ok(result);
 
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Book>>> DeleteBook(int id)
         {
-            var book = books.Find(x => x.Id == id);
-            if (book is null)
-                   return NotFound("Not Found");
-            books.Remove(book);
-            
-            return Ok(book);
+            var result = _bookService.DeleteBook(id);
+            if (result is null)
+                return NotFound("Could not find hero with corresponding ID");
+            return Ok(result);
         }
     }
 }
