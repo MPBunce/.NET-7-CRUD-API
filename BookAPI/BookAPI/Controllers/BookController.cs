@@ -1,10 +1,12 @@
 ﻿using BookAPI.Services.BookService;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BookAPI.Controllers
 {
+    [DisableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase
